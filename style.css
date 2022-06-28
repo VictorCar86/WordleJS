@@ -18,6 +18,12 @@ header {
     align-items: center;
     flex-direction: column;
     background-color: aliceblue;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 .square-row {
     display: flex;
@@ -27,16 +33,24 @@ header {
     height: 70px;
     width: 70px;
     border: 2px solid gray;
+    padding-top: 22px;
+    margin: 5px;
     list-style: none;
     text-align: center;
     font-size: 1.8rem;
-    margin: 5px;
+    font-weight: bold;
 }
 
 #keyboard {
     display: flex;
     align-items: center;
     flex-direction: column;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 .letter-row {
     display: flex;

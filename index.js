@@ -34,11 +34,11 @@ arrayKeyboard.map((letters) => {
     letters.map((letter) => {
         const letterButton = document.createElement("li")
         letterButton.classList.add("letter-column")
-        letterButton.id = letter
+        letterButton.id = letter.toUpperCase()
         letterButton.textContent = letter
         switch (letter){
             case "enter":
-                //letterButton.onclick()
+                letterButton.onclick = sendAnswer
                 break
             case "delete":
                 letterButton.onclick = deleteLetter
@@ -55,8 +55,44 @@ arrayKeyboard.map((letters) => {
 keyboard.append(...keyboardToDom)
 
 // Game logic
-let secretWord = ["p", "e", "r", "r", "o"];
+const collectionWords = [
+    [ 'c', 'e', 'r', 'd', 'o' ],
+    [ 'b', 'a', 'r', 'c', 'o' ],
+    [ 'c', 'a', 'r', 't', 'a' ],
+    [ 'm', 'o', 'r', 'a', 's' ],
+    [ 's', 'u', 'i', 'z', 'a' ],
+    [ 'a', 'l', 'm', 'a', 's' ],
+    [ 'c', 'h', 'i', 'n', 'a' ],
+    [ 'p', 'a', 't', 'o', 's' ],
+    [ 'e', 'm', 'o', 'j', 'i' ],
+    [ 'm', 'e', 'm', 'e', 's' ],
+    [ 'j', 'o', 'y', 'a', 's' ],
+    [ 'g', 'a', 't', 'o', 's' ],
+    [ 'z', 'o', 'r', 'r', 'o' ],
+    [ 'p', 'e', 'r', 'r', 'o' ],
+    [ 'v', 'o', 't', 'a', 'r' ],
+    [ 'm', 'a', 'n', 'g', 'o' ],
+    [ 'p', 'e', 'c', 'e', 's' ],
+    [ 'v', 'o', 'l', 'a', 'r' ],
+    [ 'r', 'a', 't', 'a', 's' ],
+    [ 'r', 'u', 'i', 'd', 'o' ],
+    [ 's', 'e', 't', 'a', 's' ],
+    [ 't', 'o', 'p', 'o', 's' ],
+]
 
+let secretWord = [];
+
+function randomWord(){
+    const random = Math.floor(Math.random() * 100)
+    if (random > 22){
+        randomWord()
+    } else {
+        return secretWord = collectionWords[random]
+    }
+}
+randomWord()
+
+let squarePosition = 0;
 let attempts = 0;
 
 let answer = [];
@@ -64,9 +100,10 @@ let answer = [];
 function pushLetter(){
     const letter = event.target
     if (answer.length < 5){
-        document.getElementById(`0-${attempts}`).textContent = letter.id
-        answer.push(letter.id)
-        attempts++
+        console.log(letter.id)
+        document.getElementById(`${attempts}-${squarePosition}`).textContent = letter.id
+        answer.push(letter.id.toLowerCase())
+        squarePosition++
     } else {
         alert("No es posible añadir más caracteres")
     }
@@ -74,11 +111,36 @@ function pushLetter(){
 }
 function deleteLetter(){
     if (answer.length){
-        document.getElementById(`0-${attempts-1}`).textContent = ""
+        document.getElementById(`${attempts}-${squarePosition-1}`).textContent = ""
         answer.pop()
-        attempts--
+        squarePosition--
     } else {
         alert("No hay caracteres por borrar")
     }
     console.log(answer)
+}
+function sendAnswer(){
+    if (answer.length === 5){
+        if (JSON.stringify(answer) == JSON.stringify(secretWord)){
+            for (let index = 0; index < 5; index++) {
+                document.getElementById(`${attempts}-${index}`).style.backgroundColor = "#04bc04"
+            }
+            setTimeout(() => alert("Has ganado :D"), 500)
+        } else {
+            for (let answerIndex = 0; answerIndex < answer.length; answerIndex++) {
+                const insertedLetter = answer[answerIndex];
+                for (let secretIndex = 0; secretIndex < secretWord.length; secretIndex++) {
+                    const secretLetter = secretWord[secretIndex];
+                    if (secretLetter === insertedLetter && answerIndex === secretIndex) {
+                        document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#e5d005"
+                    }
+                }
+            }
+            attempts++
+            squarePosition = 0
+            answer= []
+        }
+    } else {
+        alert("Por favor, rellene los demás espacios")
+    }
 }
