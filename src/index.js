@@ -55,77 +55,49 @@ arrayKeyboard.map((letters) => {
 keyboard.append(...keyboardToDom)
 
 // Game logic
-const collectionWords = [
-    [ 'c', 'e', 'r', 'd', 'o' ],
-    [ 'b', 'a', 'r', 'c', 'o' ],
-    [ 'c', 'a', 'r', 't', 'a' ],
-    [ 'm', 'o', 'r', 'a', 's' ],
-    [ 's', 'u', 'i', 'z', 'a' ],
-    [ 'a', 'l', 'm', 'a', 's' ],
-    [ 'c', 'h', 'i', 'n', 'a' ],
-    [ 'p', 'a', 't', 'o', 's' ],
-    [ 'e', 'm', 'o', 'j', 'i' ],
-    [ 'm', 'e', 'm', 'e', 's' ],
-    [ 'd', 'e', 'd', 'o', 's' ],
-    [ 'j', 'o', 'y', 'a', 's' ],
-    [ 'a', 'p', 'o', 'y', 'o' ],
-    [ 'g', 'a', 't', 'o', 's' ],
-    [ 'z', 'o', 'r', 'r', 'o' ],
-    [ 'p', 'e', 'r', 'r', 'o' ],
-    [ 'g', 'a', 'n', 'a', 'r' ],
-    [ 'v', 'o', 't', 'a', 'r' ],
-    [ 'm', 'a', 'n', 'g', 'o' ],
-    [ 'c', 'o', 'm', 'e', 'r' ],
-    [ 'p', 'e', 'c', 'e', 's' ],
-    [ 'l', 'o', 'c', 'o', 's' ],
-    [ 'v', 'o', 'l', 'a', 'r' ],
-    [ 'l', 'i', 'c', 'o', 'r' ],
-    [ 'c', 'i', 'r', 'c', 'o' ],
-    [ 'r', 'a', 't', 'a', 's' ],
-    [ 'p', 'o', 'l', 'l', 'o' ],
-    [ 'q', 'u', 'e', 's', 'o' ],
-    [ 'c', 'a', 'r', 'r', 'o' ],
-    [ 'r', 'u', 'i', 'd', 'o' ],
-    [ 'c', 'a', 'z', 'a', 'r' ],
-    [ 's', 'e', 't', 'a', 's' ],
-    [ 't', 'o', 'p', 'o', 's' ],
-    [ 'g', 'a', 'f', 'a', 's' ],
-]
-
 let secretWord = collectionWords[0];
 
-// function randomWord(){
-//     const random = Math.floor(Math.random() * 100)
-//     if (random > collectionWords.length){
-//         randomWord()
-//     } else {
-//         return secretWord = collectionWords[random]
-//     }
-// }
-// randomWord()
+function randomWord(){
+    const random = Math.floor(Math.random() * 100)
+    if (random > collectionWords.length){
+        randomWord()
+    } else {
+        return secretWord = collectionWords[random]
+    }
+}
+randomWord()
 
 let squarePosition = 0;
 let attempts = 0;
 
 let answer = [];
+let buttonAvaliable = true;
 
-function pushLetter(){
-    const letter = event.target
-    if (answer.length < 5){
-        console.log(letter.id)
-        document.getElementById(`${attempts}-${squarePosition}`).textContent = letter.id
-        answer.push(letter.id.toLowerCase())
-        squarePosition++
+function pushLetter(event){
+    if (buttonAvaliable){
+        const letterButton = event.target
+        if (answer.length < 5){
+            if (letterButton){
+                document.getElementById(`${attempts}-${squarePosition}`).textContent = letterButton.id
+                answer.push(letterButton.id.toLowerCase())
+            } else {
+                document.getElementById(`${attempts}-${squarePosition}`).textContent = event
+                answer.push(event.toLowerCase())
+            }
+            squarePosition++
+        }
     }
     console.log(answer)
 }
 function deleteLetter(){
-    if (answer.length){
-        document.getElementById(`${attempts}-${squarePosition-1}`).textContent = ""
-        answer.pop()
-        squarePosition--
-    } else {
-        alert("No hay caracteres por borrar")
+    if (buttonAvaliable){
+        if (answer.length){
+            document.getElementById(`${attempts}-${squarePosition-1}`).textContent = ""
+            answer.pop()
+            squarePosition--
+        } else {
+            alert("No hay caracteres por borrar")
+        }
     }
     console.log(answer)
 }
@@ -138,30 +110,39 @@ function sendAnswer(){
             if (JSON.stringify(answer) == JSON.stringify(secretWord)){
                 for (let index = 0; index < 5; index++) {
                     document.getElementById(`${attempts}-${index}`).style.backgroundColor = "#04bc04"
+                    document.getElementById(`${attempts}-${index}`).style.color = "white"
                 }
                 setTimeout(() => alert("Has ganado :D"), 500)
+                buttonAvaliable = false
             } else {
                 for (let answerIndex = 0; answerIndex < answer.length; answerIndex++) {
                     const insertedLetter = answer[answerIndex];
                     for (let secretIndex = 0; secretIndex < secretWord.length; secretIndex++) {
                         const secretLetter = secretWord[secretIndex];
-                        console.log(secretLetter, insertedLetter, answerIndex, secretIndex)
+                        console.log(secretLetter, insertedLetter, secretIndex, answerIndex)
                         if (secretLetter === insertedLetter && secretIndex === answerIndex) {
                             document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#04bc04"
+                            document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
                             document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "#04bc04"
-                        } else if (secretLetter != insertedLetter && secretIndex === answerIndex){
+                        } else if (secretWord.includes(insertedLetter) && insertedLetter === secretLetter){
+                            document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#E5D005"
+                            document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
+                            document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "#E5D005"
+                        } else if (secretLetter != insertedLetter && secretIndex === answerIndex) {
                             document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "gray"
+                            document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
                             document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "gray"
                         }
-                        // if (JSON.stringify(answer).includes(secretLetter)){
-                        //     document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#E5D005"
-                        //     document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "#E5D005"
-                        // }
                     }
                 }
-                attempts++
-                squarePosition = 0
-                answer= []
+                if (squarePosition === 5 && attempts === 5){
+                    alert(`Se han acabado tus intentos\nLa respuesta correcta era ✨${secretWord.join("").toUpperCase()}✨`)
+                    buttonAvaliable = false
+                } else {
+                    attempts++
+                    squarePosition = 0
+                    answer= []
+                }
             }
         }
     } else {
