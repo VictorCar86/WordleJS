@@ -57,15 +57,15 @@ keyboard.append(...keyboardToDom)
 // Game logic
 let secretWord = collectionWords[0];
 
-function randomWord(){
-    const random = Math.floor(Math.random() * 100)
-    if (random > collectionWords.length){
-        randomWord()
-    } else {
-        return secretWord = collectionWords[random]
-    }
-}
-randomWord()
+// function randomWord(){
+//     const random = Math.floor(Math.random() * 100)
+//     if (random > collectionWords.length){
+//         randomWord()
+//     } else {
+//         return secretWord = collectionWords[random]
+//     }
+// }
+// randomWord()
 
 let squarePosition = 0;
 let attempts = 0;
@@ -103,6 +103,7 @@ function deleteLetter(){
 }
 function sendAnswer(){
     console.log(attempts, squarePosition)
+    console.log(secretWord)
     if (answer.length === 5){
         if (!collectionWords.some(element => JSON.stringify(element) == JSON.stringify(answer))){
             alert("La palabra ingresada no existe en la base de datos")
@@ -117,22 +118,32 @@ function sendAnswer(){
             } else {
                 for (let answerIndex = 0; answerIndex < answer.length; answerIndex++) {
                     const insertedLetter = answer[answerIndex];
+
                     for (let secretIndex = 0; secretIndex < secretWord.length; secretIndex++) {
                         const secretLetter = secretWord[secretIndex];
-                        console.log(secretLetter, insertedLetter, secretIndex, answerIndex)
-                        if (secretLetter === insertedLetter && secretIndex === answerIndex) {
-                            document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#04bc04"
+
+                        function newBackground(newColor){
+                            document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = newColor
                             document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
-                            document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "#04bc04"
-                        } else if (secretWord.includes(insertedLetter) && insertedLetter === secretLetter){
-                            document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#E5D005"
-                            document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
-                            document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "#E5D005"
-                        } else if (secretLetter != insertedLetter && secretIndex === answerIndex) {
-                            document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "gray"
-                            document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
-                            document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "gray"
+                            document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = newColor
                         }
+                        console.log(secretLetter, insertedLetter, secretIndex, answerIndex)
+                        if (secretIndex == 4) console.log("-------")
+
+                        if (secretLetter === insertedLetter && answerIndex === secretIndex) {
+                            newBackground("#04bc04")
+                        }
+                        else if (secretWord.includes(insertedLetter) && secretLetter != insertedLetter && answerIndex === secretIndex){
+                            newBackground("#E5D005")
+                        }
+                        else if (secretLetter != insertedLetter && answerIndex === secretIndex) {
+                            newBackground("gray")
+                        }
+                        // if (secretWord.includes(insertedLetter) && insertedLetter != secretLetter){
+                        //     document.getElementById(`${attempts}-${answerIndex}`).style.backgroundColor = "#E5D005"
+                        //     document.getElementById(`${attempts}-${answerIndex}`).style.color = "white"
+                        //     document.getElementById(insertedLetter.toUpperCase()).style.backgroundColor = "#E5D005"
+                        // }
                     }
                 }
                 if (squarePosition === 5 && attempts === 5){
