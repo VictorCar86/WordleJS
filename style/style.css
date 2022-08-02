@@ -7,17 +7,31 @@ html {
     font-size: 62.5%;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+body {
+    height: 100vh;
+    background-color: #406882;
+}
 
-header {
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
     height: 50px;
-    text-align: center;
+    margin-bottom: 10px;
+    background-color: #1A374D;
+}
+.header__wordle {
+    width: 170px;
+}
+.header__js {
+    width: 30px;
 }
 
 #squares {
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: aliceblue;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -38,14 +52,14 @@ header {
     justify-content: center;
     align-items: center;
     width: 100%;
-    border: 2px solid rgb(64, 62, 62);
+    border: 2px solid #403e3e;
     border-radius: 5px;
     margin: 5px;
     list-style: none;
     text-align: center;
     font-size: 1.8rem;
     font-weight: bold;
-    background-color: rgb(215, 218, 223);
+    background-color: #d7dadf;
 }
 
 #keyboard {
@@ -60,25 +74,40 @@ header {
             user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 .letter-row {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(30px, 60px);
     list-style: none;
 }
 .letter-column {
-    width: 60px;
     height: 60px;
-    margin: 5px;
+    margin: 2px 1px;
     padding-top: 18px;
-    border: 2px solid slategray;
+    border: 2px solid #403e3e;
     border-radius: 10px;
     background-color: aliceblue;
     font-size: 1.8rem;
     font-weight: bold;
     text-align: center;
     cursor: pointer;
+    -webkit-tap-highlight-color: #c2c8cd99;
+}
+.letter-column:active {
+    background-color: #c2c8cd99;
 }
 #ENTER {
-    width: max-content;
+    background-image: url("../assets/enter.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 65%;
 }
 #DELETE {
-    width: max-content;
+    background-image: url("../assets/delete.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 70%;
+}
+.gray {
+    background-color: #7c7b7b;
+    color: white;
 }
